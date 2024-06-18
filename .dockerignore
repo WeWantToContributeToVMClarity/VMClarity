@@ -10,3 +10,4 @@ scanner_boot_test
 Dockerfile*
 dist
 go.work*
+.asd.json
