@@ -23,6 +23,7 @@ jobs:
       post_image_tags: true
     permissions:
       contents: write
+      packages: write
 
   e2e-docker:
     needs: build
