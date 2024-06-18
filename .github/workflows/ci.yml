@@ -27,6 +27,11 @@ jobs:
       push: true
       use_release_repository: false
       post_image_tags: true
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      security-events: write
 
   e2e-docker:
     needs: build
