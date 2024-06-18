@@ -45,7 +45,7 @@ jobs:
           ## Set digests cache name
           ##
           ##    Example: digest-1234-a2850e9cc4e2b3a3
-          ## asd-asd1
+          ##
 
           image_name_hash="$(sha256sum <<< "${{ inputs.bake_target_name }}" | cut -f1 -d' ')"
           printf "digests-cache-name=digest-%s-%.16s" "${{ github.run_id }}" "${image_name_hash}" >> "$GITHUB_OUTPUT"
@@ -79,7 +79,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ github.token }}
 
       - name: Build
         uses: docker/bake-action@7a5dfed3550ca014665af2a27af8fc9d7284b9b3 # v4.5.0
@@ -139,7 +139,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ github.token }}
 
       - name: Create manifest list and push
         working-directory: /tmp/digests

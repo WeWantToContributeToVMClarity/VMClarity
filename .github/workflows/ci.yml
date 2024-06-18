@@ -13,7 +13,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # verification:
+  #   name: Verification
+  #   uses: ./.github/workflows/reusable-verification.yml
+  #   secrets: inherit
+
   build:
+    # needs: verification
     name: Build
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:
@@ -21,11 +27,6 @@ jobs:
       push: true
       use_release_repository: false
       post_image_tags: true
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-      security-events: write
 
   e2e-docker:
     needs: build
