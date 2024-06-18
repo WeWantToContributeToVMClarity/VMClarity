@@ -45,7 +45,7 @@ jobs:
           ## Set digests cache name
           ##
           ##    Example: digest-1234-a2850e9cc4e2b3a3
-          ##
+          ## asd
 
           image_name_hash="$(sha256sum <<< "${{ inputs.bake_target_name }}" | cut -f1 -d' ')"
           printf "digests-cache-name=digest-%s-%.16s" "${{ github.run_id }}" "${image_name_hash}" >> "$GITHUB_OUTPUT"
