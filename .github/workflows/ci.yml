@@ -20,7 +20,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
-      push: true
+      # # push: true
       use_release_repository: false
       post_image_tags: true
     permissions:
