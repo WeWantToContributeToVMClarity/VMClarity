@@ -4,13 +4,6 @@ on:
   pull_request:
   merge_group:
 
-permissions:
-  packages: write
-  pull-requests: write
-  contents: read
-  id-token: write
-  security-events: write
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -30,6 +23,11 @@ jobs:
       push: true
       use_release_repository: false
       post_image_tags: true
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      security-events: write
 
   e2e-docker:
     needs: build

@@ -102,6 +102,11 @@ jobs:
       timestamp: ${{ needs.prepare.outputs.timestamp }}
       bake_target_name: ${{ matrix.target }}
       post_image_tags: ${{ inputs.post_image_tags }}
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      security-events: write
 
   post-images:
     if: github.event_name == 'pull_request' && inputs.post_image_tags
