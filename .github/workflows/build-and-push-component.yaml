@@ -102,8 +102,7 @@ jobs:
       - name: Save artifacts
         run: |
           mkdir -p /tmp/artifacts
-          cp -r "${{ steps.bake.outputs.artifacts }}" /tmp/artifacts
-          echo "artifacts=/tmp/artifacts" >> "$GITHUB_OUTPUT"
+          docker save "${{ inputs.image_name }}" > "/tmp/artifacts/${{ inputs.image_name }}.tar"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
