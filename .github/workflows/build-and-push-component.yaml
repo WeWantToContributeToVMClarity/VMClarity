@@ -89,7 +89,7 @@ jobs:
           targets: ${{ inputs.bake_target_name }}
           set: |
             *.platform=${{ matrix.platform }}
-            *.output=type=image,name=${{ inputs.image_name }},push-by-digest=true,name-canonical=true,push=${{ inputs.push }}
+            *.output=${{ inputs.push == 'true' && 'type=image,name=${{ inputs.image_name }},push-by-digest=true,name-canonical=true,push=${{ inputs.push }}' || 'type=tar,dest=/tmp/${{ inputs.image_name }}.tar' }}
             *.tags=
             *.cache-to=type=local,dest=/tmp/.buildx-cache
             *.cache-from=type=local,src=/tmp/.buildx-cache
@@ -99,17 +99,16 @@ jobs:
           COMMIT_HASH: ${{ github.sha }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
-      - name: Print build output
-        run: echo "${{ steps.bake.outputs }}" | jq
-
       - name: Save artifacts
         id: artifacts
         run: |
           mkdir -p /tmp/artifacts
           image_name=${{ inputs.image_name }}
           safe_image_name=${image_name//\//-}
-          docker save "$image_name" > "/tmp/artifacts/$safe_image_name.tar"
-          echo "artifacts=/tmp/artifacts/$safe_image_name.tar" >> "$GITHUB_OUTPUT"
+          if [[ -f "/tmp/$safe_image_name.tar" ]]; then
+            mv "/tmp/$safe_image_name.tar" "/tmp/artifacts/$safe_image_name.tar"
+            echo "artifacts=/tmp/artifacts/$safe_image_name.tar" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
