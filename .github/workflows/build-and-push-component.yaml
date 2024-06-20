@@ -89,7 +89,7 @@ jobs:
           targets: ${{ inputs.bake_target_name }}
           set: |
             *.platform=${{ matrix.platform }}
-            *.output=${{ format(inputs.push == 'true' && 'type=image,name={0},push-by-digest=true,name-canonical=true,push={1}' || 'type=tar,dest=/tmp/{0}.tar', inputs.image_name, inputs.push) }}
+            *.output=${{ format(inputs.push == 'true' && 'type=image,name={0},push-by-digest=true,name-canonical=true,push={1}' || 'type=tar,dest=/tmp/{2}.tar', inputs.image_name, inputs.push, inputs.bake_target_name) }}
             *.tags=
             *.cache-to=type=local,dest=/tmp/.buildx-cache
             *.cache-from=type=local,src=/tmp/.buildx-cache
