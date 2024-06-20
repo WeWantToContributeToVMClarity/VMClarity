@@ -76,14 +76,22 @@ jobs:
           pattern: vmclarity-*-linux-amd64
           merge-multiple: true
 
-      - name: Load images
+      - name: Load docker images
+        if: inputs.platform == 'docker'
         run: |
           for image in tmp/artifacts/*.tar; do
             output=$(docker load --input $image)
             image_id=$(echo $output | awk '{ print $4 }')
             docker tag $image_id $(basename $image .tar):${{ inputs.image_tag }}
           done
-          docker images 
+          docker images
+        
+      - name: Load kind images
+        if: inputs.platform == 'kubernetes'
+        run: |
+          for image in tmp/artifacts/*.tar; do
+            kind load docker-image $(basename $image .tar):${{ inputs.image_tag }}
+          done
 
       - name: Run end to end tests
         env:
