@@ -81,9 +81,11 @@ jobs:
 
       - name: Load images
         run: |
+          docker version
           for image in tmp/artifacts/*.tar; do
             ls -lah $image
             docker load --input $image
+            docker image ls -a 
           done
 
       - name: Run end to end tests

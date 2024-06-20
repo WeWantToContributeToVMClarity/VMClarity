@@ -51,7 +51,7 @@ jobs:
           targets: ${{ inputs.bake_target_name }}
           set: |
             *.platform=${{ matrix.platform }}
-            *.output=type=tar,dest=/tmp/${{ inputs.bake_target_name }}.tar
+            *.output=type=docker,dest=/tmp/${{ inputs.bake_target_name }}.tar
             *.tags=
             *.cache-to=type=local,dest=/tmp/.buildx-cache
             *.cache-from=type=local,src=/tmp/.buildx-cache
