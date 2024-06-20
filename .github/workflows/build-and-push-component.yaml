@@ -71,7 +71,7 @@ jobs:
         id: upload-artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{ env.ARTIFACT_NAME }}.tar
           path: /tmp/artifacts/*
           if-no-files-found: error
           retention-days: 1
