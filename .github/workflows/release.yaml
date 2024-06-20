@@ -24,7 +24,7 @@ jobs:
     uses: ./.github/workflows/reusable-build-and-push.yml
     with:
       image_tag: ${{ github.ref_name }}
-      push: true
+      release: true
       use_release_repository: true
 
   publish_helm:
