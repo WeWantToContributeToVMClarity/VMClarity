@@ -76,13 +76,13 @@ jobs:
 
       - name: Run end to end tests
         env:
-          VMCLARITY_E2E_APISERVER_IMAGE: e2e-artifacts/vmclarity-apiserver-${{ inputs.image_tag }}.tar
-          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: e2e-artifacts/vmclarity-orchestrator-${{ inputs.image_tag }}.tar
-          VMCLARITY_E2E_UI_IMAGE: e2e-artifacts/vmclarity-ui-${{ inputs.image_tag }}.tar
-          VMCLARITY_E2E_UIBACKEND_IMAGE: e2e-artifacts/vmclarity-ui-backend-${{ inputs.image_tag }}.tar
-          VMCLARITY_E2E_SCANNER_IMAGE: e2e-artifacts/vmclarity-scanner-${{ inputs.image_tag }}.tar
-          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: e2e-artifacts/vmclarity-cr-discovery-server-${{ inputs.image_tag }}.tar
-          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: e2e-artifacts/vmclarity-plugin-kics-${{ inputs.image_tag }}.tar
+          VMCLARITY_E2E_APISERVER_IMAGE: e2e-artifacts/vmclarity-apiserver-${{ inputs.image_tag }}-linux-amd64.tar
+          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: e2e-artifacts/vmclarity-orchestrator-${{ inputs.image_tag }}-linux-amd64.tar
+          VMCLARITY_E2E_UI_IMAGE: e2e-artifacts/vmclarity-ui-${{ inputs.image_tag }}-linux-amd64.tar
+          VMCLARITY_E2E_UIBACKEND_IMAGE: e2e-artifacts/vmclarity-ui-backend-${{ inputs.image_tag }}-linux-amd64.tar
+          VMCLARITY_E2E_SCANNER_IMAGE: e2e-artifacts/vmclarity-scanner-${{ inputs.image_tag }}-linux-amd64.tar
+          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: e2e-artifacts/vmclarity-cr-discovery-server-${{ inputs.image_tag }}-linux-amd64.tar
+          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: e2e-artifacts/vmclarity-plugin-kics-${{ inputs.image_tag }}-linux-amd64.tar
           VMCLARITY_E2E_PLATFORM: ${{ inputs.platform }}
         run: |
           if [[ "${{ inputs.platform }}" == "kubernetes" ]]; then
