@@ -78,12 +78,12 @@ jobs:
 
       - name: Load images
         run: |
-          docker version
           for image in tmp/artifacts/*.tar; do
             output=$(docker load --input $image)
             image_id=$(echo $output | awk '{ print $4 }')
             docker tag $image_id $(basename $image .tar):${{ inputs.image_tag }}
           done
+          docker images 
 
       - name: Run end to end tests
         env:
