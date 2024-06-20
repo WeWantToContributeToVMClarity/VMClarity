@@ -75,6 +75,7 @@ jobs:
             ${{ runner.os }}-buildx-
 
       - name: Login to GitHub Container Registry
+        if: inputs.push
         uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
         with:
           registry: ghcr.io
@@ -97,6 +98,18 @@ jobs:
           BUILD_TIMESTAMP: ${{ inputs.timestamp }}
           COMMIT_HASH: ${{ github.sha }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
+
+      - name: Save artifacts
+        run: |
+          mkdir -p /tmp/artifacts
+          cp -r "${{ steps.bake.outputs.artifacts }}" /tmp/artifacts
+          echo "artifacts=/tmp/artifacts" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: ${{ inputs.bake_target_name }}-${{ inputs.image_tag }}-${{ matrix.platform }}
+          path: /tmp/artifacts/*
 
       - name: Export digest
         if: inputs.push
