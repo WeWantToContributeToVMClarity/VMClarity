@@ -32,7 +32,6 @@ jobs:
     uses: ./.github/workflows/reusable-end-to-end-testing.yml
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
-      use_release_repository: false
       platform: docker
 
   e2e-k8s:
@@ -41,7 +40,6 @@ jobs:
     uses: ./.github/workflows/reusable-end-to-end-testing.yml
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
-      use_release_repository: false
       platform: kubernetes
 
   success:
