@@ -99,8 +99,8 @@ jobs:
           COMMIT_HASH: ${{ github.sha }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
-      - name: List Docker images
-        run: docker images
+      - name: Print build output
+        run: echo "${{ steps.bake.outputs }}"
 
       - name: Save artifacts
         id: artifacts
