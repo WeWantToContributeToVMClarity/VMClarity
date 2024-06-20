@@ -107,7 +107,8 @@ jobs:
           safe_image_name=${image_name//\//-}
           if [[ -f "/tmp/$safe_image_name.tar" ]]; then
             mv "/tmp/$safe_image_name.tar" "/tmp/artifacts/$safe_image_name.tar"
-            echo "artifacts=/tmp/artifacts/$safe_image_name.tar" >> "$GITHUB_OUTPUT"
+            echo "::set-output name=artifacts::\
+            /tmp/artifacts/$safe_image_name.tar"
           fi
 
       - name: Upload artifacts
