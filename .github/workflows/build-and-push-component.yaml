@@ -100,7 +100,7 @@ jobs:
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
       - name: Print build output
-        run: echo "${{ steps.bake.outputs }}"
+        run: echo "${{ steps.bake.outputs }}" | jq
 
       - name: Save artifacts
         id: artifacts
