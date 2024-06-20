@@ -37,10 +37,6 @@ jobs:
             echo "plugin-kics-image=vmclarity-plugin-kics-${{ inputs.image_tag }}"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Echo container image names
-        run: |
-          cat "$GITHUB_OUTPUT"
-
   run:
     runs-on: ubuntu-latest
     needs: images
@@ -101,7 +97,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
         with:
-          name: images
+          path: /tmp/artifacts/*
 
       - name: Run end to end tests
         env:
