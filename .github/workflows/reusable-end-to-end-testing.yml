@@ -76,11 +76,12 @@ jobs:
           path: e2e-artifacts
 
       - name: List files in e2e-artifacts
-        run: ls -l ${{ github.workspace }}/e2e-artifacts
+        run: ls -lah ${{ github.workspace }}/e2e-artifacts
 
       - name: Load images
         run: |
           for image in ${{ github.workspace }}/e2e-artifacts/*.tar; do
+            ls -lah $image
             docker load -i $image
           done
 

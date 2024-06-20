@@ -64,15 +64,15 @@ jobs:
       - name: Save artifacts
         run: |
           mkdir -p /tmp/artifacts
-          mv "/tmp/${{ inputs.bake_target_name }}.tar" "/tmp/artifacts/${{ inputs.bake_target_name }}.tar"
+          mv "/tmp/${{ inputs.bake_target_name }}.tar" "/tmp/artifacts/${{ inputs.bake_target_name }}"
           echo "ARTIFACT_NAME=$(echo ${{ inputs.bake_target_name }}-${{ inputs.image_tag }}-${{ matrix.platform }} | tr '/' '-')" >> $GITHUB_ENV
 
       - name: Upload artifacts
         id: upload-artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
-          name: ${{ env.ARTIFACT_NAME }}.tar
-          path: /tmp/artifacts/*
+          name: ${{ env.ARTIFACT_NAME }}
+          path: /tmp/artifacts/*.tar
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
