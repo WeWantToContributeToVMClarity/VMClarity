@@ -99,6 +99,9 @@ jobs:
           COMMIT_HASH: ${{ github.sha }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
+      - name: ls
+        run: ls -l /tmp
+
       - name: Save artifacts
         id: artifacts
         run: |
