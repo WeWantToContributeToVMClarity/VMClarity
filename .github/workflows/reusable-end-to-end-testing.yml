@@ -72,31 +72,28 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
         with:
+          path: tmp/artifacts
           pattern: vmclarity-*-linux-amd64
           merge-multiple: true
-          path: tmp/artifacts
-
-      - name: List files in workspace
-        run: ls -lah tmp/artifacts
 
       - name: Load images
         run: |
           docker version
           for image in tmp/artifacts/*.tar; do
-            ls -lah $image
-            docker load --input $image
-            docker image ls -a 
+            output=$(docker load --input $image)
+            image_id=$(echo $output | awk '{ print $4 }')
+            docker tag $image_id $(basename $image .tar):${{ inputs.image_tag }}
           done
 
       - name: Run end to end tests
         env:
-          VMCLARITY_E2E_APISERVER_IMAGE: vmclarity-apiserver-${{ inputs.image_tag }}-linux-amd64.tar
-          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: vmclarity-orchestrator-${{ inputs.image_tag }}-linux-amd64.tar
-          VMCLARITY_E2E_UI_IMAGE: vmclarity-ui-${{ inputs.image_tag }}-linux-amd64.tar
-          VMCLARITY_E2E_UIBACKEND_IMAGE: vmclarity-ui-backend-${{ inputs.image_tag }}-linux-amd64.tar
-          VMCLARITY_E2E_SCANNER_IMAGE: vmclarity-scanner-${{ inputs.image_tag }}-linux-amd64.tar
-          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: vmclarity-cr-discovery-server-${{ inputs.image_tag }}-linux-amd64.tar
-          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: vmclarity-plugin-kics-${{ inputs.image_tag }}-linux-amd64.tar
+          VMCLARITY_E2E_APISERVER_IMAGE: vmclarity-apiserver-${{ inputs.image_tag }}
+          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: vmclarity-orchestrator-${{ inputs.image_tag }}
+          VMCLARITY_E2E_UI_IMAGE: vmclarity-ui-${{ inputs.image_tag }}
+          VMCLARITY_E2E_UIBACKEND_IMAGE: vmclarity-ui-backend-${{ inputs.image_tag }}
+          VMCLARITY_E2E_SCANNER_IMAGE: vmclarity-scanner-${{ inputs.image_tag }}
+          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: vmclarity-cr-discovery-server-${{ inputs.image_tag }}
+          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: vmclarity-plugin-kics-${{ inputs.image_tag }}
           VMCLARITY_E2E_PLATFORM: ${{ inputs.platform }}
         run: |
           if [[ "${{ inputs.platform }}" == "kubernetes" ]]; then
