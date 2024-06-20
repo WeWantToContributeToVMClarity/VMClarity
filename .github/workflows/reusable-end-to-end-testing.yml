@@ -76,7 +76,7 @@ jobs:
           pattern: vmclarity-*-linux-amd64
           merge-multiple: true
 
-      - name: Load docker images
+      - name: Load images for Docker
         if: inputs.platform == 'docker'
         run: |
           for image in tmp/artifacts/*.tar; do
@@ -86,7 +86,7 @@ jobs:
           done
           docker images
         
-      - name: Load kind images
+      - name: Load images for Kubernetes
         if: inputs.platform == 'kubernetes'
         run: |
           for image in tmp/artifacts/*.tar; do
