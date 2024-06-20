@@ -112,10 +112,14 @@ jobs:
           fi
 
       - name: Upload artifacts
+        id: upload-artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ inputs.bake_target_name }}-${{ inputs.image_tag }}-${{ matrix.platform }}
-          path: ${{ steps.artifacts.outputs.artifacts }}
+          path: /tmp/artifacts/*
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
 
       - name: Export digest
         if: inputs.push
