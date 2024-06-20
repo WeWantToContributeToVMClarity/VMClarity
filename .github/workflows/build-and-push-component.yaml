@@ -100,15 +100,19 @@ jobs:
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
       - name: Save artifacts
+        id: artifacts
         run: |
           mkdir -p /tmp/artifacts
-          docker save "${{ inputs.image_name }}" > "/tmp/artifacts/${{ inputs.image_name }}.tar"
+          image_name=${{ inputs.image_name }}
+          safe_image_name=${image_name//\//-}
+          docker save "$image_name" > "/tmp/artifacts/$safe_image_name.tar"
+          echo "artifacts=/tmp/artifacts/$safe_image_name.tar" >> "$GITHUB_OUTPUT"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ inputs.bake_target_name }}-${{ inputs.image_tag }}-${{ matrix.platform }}
-          path: /tmp/artifacts/*
+          path: ${{ steps.artifacts.outputs.artifacts }}
 
       - name: Export digest
         if: inputs.push
