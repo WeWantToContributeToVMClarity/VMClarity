@@ -111,7 +111,7 @@ jobs:
         id: upload-artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
-          name: ${{ inputs.bake_target_name }}-${{ inputs.image_tag }}-${{ matrix.platform }}
+          name: ${{ replace(inputs.bake_target_name, '/', '-') }}-${{ inputs.image_tag }}-${{ replace(matrix.platform, '/', '-') }}
           path: /tmp/artifacts/*
           if-no-files-found: error
           retention-days: 1
