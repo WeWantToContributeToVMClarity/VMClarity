@@ -98,7 +98,7 @@ jobs:
     with:
       image_name: "${{ needs.prepare.outputs.registry }}/${{ matrix.target }}${{ needs.prepare.outputs.suffix }}"
       image_tag: ${{ inputs.image_tag }}
-      push: ${{ inputs.push }}
+      push: true
       timestamp: ${{ needs.prepare.outputs.timestamp }}
       bake_target_name: ${{ matrix.target }}
       post_image_tags: ${{ inputs.post_image_tags }}

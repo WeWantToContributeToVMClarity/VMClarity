@@ -15,7 +15,7 @@ on:
         required: false
         type: boolean
         description: 'If set to true, push the image.'
-        default: true
+        default: false
       timestamp:
         required: true
         type: string
@@ -33,6 +33,7 @@ on:
 
 jobs:
   build-vars:
+    if: inputs
     runs-on: ubuntu-latest
     outputs:
       digests-cache-name: ${{ steps.build-vars.outputs.digests-cache-name }}
