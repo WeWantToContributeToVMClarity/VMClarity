@@ -76,8 +76,7 @@ jobs:
           pattern: vmclarity-*-linux-amd64
           merge-multiple: true
 
-      - name: Load images for Docker
-        if: inputs.platform == 'docker'
+      - name: Load images to local Docker registry
         run: |
           for image in tmp/artifacts/*.tar; do
             output=$(docker load --input $image)
