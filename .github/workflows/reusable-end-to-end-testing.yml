@@ -13,33 +13,8 @@ on:
         description: 'Platform used to run end-to-end tests. Supported values are `docker` and `kubernetes`.'
 
 jobs:
-  images:
-    runs-on: ubuntu-latest
-    outputs:
-      apiserver-image: ${{ steps.images.outputs.apiserver-image }}
-      orchestrator-image: ${{ steps.images.outputs.orchestrator-image }}
-      ui-backend-image: ${{ steps.images.outputs.ui-backend-image }}
-      ui-image: ${{ steps.images.outputs.ui-image }}
-      cli-image: ${{ steps.images.outputs.cli-image }}
-      cr-discovery-server-image: ${{ steps.images.outputs.cr-discovery-server-image }}
-      plugin-kics-image: ${{ steps.images.outputs.plugin-kics-image}}
-    steps:
-      - name: Set container image names
-        id: images
-        run: |
-          {
-            echo "apiserver-image=vmclarity-apiserver-${{ inputs.image_tag }}"
-            echo "orchestrator-image=vmclarity-orchestrator-${{ inputs.image_tag }}"
-            echo "ui-backend-image=vmclarity-ui-backend$-${{ inputs.image_tag }}"
-            echo "ui-image=vmclarity-ui-${{ inputs.image_tag }}"
-            echo "cli-image=vmclarity-cli-${{ inputs.image_tag }}"
-            echo "cr-discovery-server-image=vmclarity-cr-discovery-server-${{ inputs.image_tag }}"
-            echo "plugin-kics-image=vmclarity-plugin-kics-${{ inputs.image_tag }}"
-          } >> "$GITHUB_OUTPUT"
-
   run:
     runs-on: ubuntu-latest
-    needs: images
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -93,19 +68,21 @@ jobs:
 
       - name: Install btrfs
         run: sudo apt-get install libbtrfs-dev -y
-    
+
       - name: Download artifacts
         uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
+        with:
+          name: e2e-artifacts
 
       - name: Run end to end tests
         env:
-          VMCLARITY_E2E_APISERVER_IMAGE:  ${{ github.workspace }}/vmclarity-apiserver-${{ inputs.image_tag }}
-          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: ${{ github.workspace }}/vmclarity-orchestrator-${{ inputs.image_tag }}
-          VMCLARITY_E2E_UI_IMAGE: ${{ github.workspace }}/vmclarity-ui-${{ inputs.image_tag }}
-          VMCLARITY_E2E_UIBACKEND_IMAGE: ${{ github.workspace }}/vmclarity-ui-backend-${{ inputs.image_tag }}
-          VMCLARITY_E2E_SCANNER_IMAGE: ${{ github.workspace }}/vmclarity-cli-${{ inputs.image_tag }}
-          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: ${{ github.workspace }}/vmclarity-cr-discovery-server-${{ inputs.image_tag }}
-          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: ${{ github.workspace }}/vmclarity-plugin-kics-${{ inputs.image_tag }}
+          VMCLARITY_E2E_APISERVER_IMAGE: e2e-artifacts/vmclarity-apiserver-${{ inputs.image_tag }}.tar
+          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: e2e-artifacts/vmclarity-orchestrator-${{ inputs.image_tag }}.tar
+          VMCLARITY_E2E_UI_IMAGE: e2e-artifacts/vmclarity-ui-${{ inputs.image_tag }}.tar
+          VMCLARITY_E2E_UIBACKEND_IMAGE: e2e-artifacts/vmclarity-ui-backend-${{ inputs.image_tag }}.tar
+          VMCLARITY_E2E_SCANNER_IMAGE: e2e-artifacts/vmclarity-scanner-${{ inputs.image_tag }}.tar
+          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: e2e-artifacts/vmclarity-cr-discovery-server-${{ inputs.image_tag }}.tar
+          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: e2e-artifacts/vmclarity-plugin-kics-${{ inputs.image_tag }}.tar
           VMCLARITY_E2E_PLATFORM: ${{ inputs.platform }}
         run: |
           if [[ "${{ inputs.platform }}" == "kubernetes" ]]; then
