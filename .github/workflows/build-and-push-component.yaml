@@ -61,7 +61,6 @@ jobs:
           COMMIT_HASH: ${{ github.sha }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
-      # This might be unnecessary
       - name: Save artifacts
         run: |
           mkdir -p /tmp/artifacts
@@ -73,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: /tmp/artifacts/${{ inputs.bake_target_name }}.tar # This might be unnecessary
+          path: /tmp/artifacts/${{ inputs.bake_target_name }}.tar
           if-no-files-found: error
           retention-days: 1
           compression-level: 0

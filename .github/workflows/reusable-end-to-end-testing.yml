@@ -83,7 +83,7 @@ jobs:
         run: |
           for image in tmp/artifacts/*.tar; do
             ls -lah $image
-            docker load --input tmp/artifacts/$image
+            docker load --input $image
           done
 
       - name: Run end to end tests
