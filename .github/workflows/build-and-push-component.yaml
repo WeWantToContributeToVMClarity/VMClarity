@@ -77,3 +77,15 @@ jobs:
           retention-days: 1
           compression-level: 0
           overwrite: true
+
+      - name: Post comment with image tags
+        uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 # v2.9.0
+        with:
+          hide_and_recreate: true
+          hide_classify: "OUTDATED"
+          skip_unchanged: true
+          header: image-tags
+          message: |
+            Hey!
+            Your images are ready:
+            ${{ steps.upload-artifacts.outputs.artifact_url }}
