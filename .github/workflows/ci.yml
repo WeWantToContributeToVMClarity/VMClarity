@@ -17,23 +17,12 @@ jobs:
     uses: ./.github/workflows/reusable-verification.yml
     secrets: inherit
 
-  prepare-build:
-    needs: verification
-    name: Prepare Build
-    uses: ./.github/workflows/reusable-prepare-build.yml 
-
   build:
-    needs: prepare-build
+    needs: verification
     name: Build
     uses: ./.github/workflows/build-and-push-components.yml
-    strategy:
-      fail-fast: false
-      matrix:
-        target: ${{ fromJson(needs.prepare.outputs.target) }}
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
-      timestamp: ${{ needs.prepare.outputs.timestamp }}
-      bake_target_name: ${{ matrix.target }}
 
   e2e-docker:
     needs: build

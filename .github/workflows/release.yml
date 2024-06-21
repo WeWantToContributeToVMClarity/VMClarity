@@ -122,27 +122,15 @@ jobs:
           if-no-files-found: error
           compression-level: 0
 
-  prepare-build:
-    needs: verification
-    name: Prepare Build
-    uses: ./.github/workflows/reusable-prepare-build.yml 
-
   build_and_push:
     needs:
-      - prepare-build
       - publish_helm_chart
       - artifacts
     name: Build & Push
-    strategy:
-      fail-fast: false
-      matrix:
-        target: ${{ fromJson(needs.prepare-build.outputs.targets) }}
     uses: ./.github/workflows/build-and-push-components-release.yml
     with:
       image_name: ghcr.io/wewanttocontributetovmclarity//${{ matrix.target }}
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
-      timestamp: ${{ needs.prepare-build.outputs.timestamp }}
-      bake_target_name: ${{ matrix.target }}
 
   main_release:
     needs:
