@@ -25,7 +25,7 @@ jobs:
   build:
     needs: prepare-build
     name: Build
-    uses: ./.github/workflows/reusable-build-and-push-component.yml
+    uses: ./.github/workflows/build-and-push-components.yml
     strategy:
       fail-fast: false
       matrix:

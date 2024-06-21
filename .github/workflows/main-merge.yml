@@ -25,7 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         target: ${{ fromJson(needs.prepare-build.outputs.targets) }}
-    uses: ./.github/workflows/build-and-push-component-release.yml
+    uses: ./.github/workflows/build-and-push-components-release.yml
     with:
       image_name: ghcr.io/wewanttocontributetovmclarity//${{ matrix.target }}
       image_tag: latest
