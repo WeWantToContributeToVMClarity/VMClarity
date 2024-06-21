@@ -29,10 +29,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ${{ fromJson(needs.prepare-build.outputs.targets) }}
+        target: ${{ fromJson(needs.prepare.outputs.target) }}
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
-      timestamp: ${{ needs.prepare-build.outputs.timestamp }}
+      timestamp: ${{ needs.prepare.outputs.timestamp }}
       bake_target_name: ${{ matrix.target }}
 
   e2e-docker:

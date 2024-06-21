@@ -1,4 +1,4 @@
-name: Build & Push
+name: Prepare Build
 
 on:
   workflow_call:
