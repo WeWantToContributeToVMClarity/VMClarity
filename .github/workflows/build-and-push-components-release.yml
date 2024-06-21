@@ -158,9 +158,9 @@ jobs:
         run: |
           # shellcheck disable=SC2046
           docker buildx imagetools create \
-            --tag "${{ inputs.registry_name }}/${{ needs.prepare-build.outputs.targets }}:${{ inputs.image_tag }}" \
-            $(printf '${{ inputs.registry_name }}/${{ needs.prepare-build.outputs.targets }}@sha256:%s ' *)
+            --tag "${{ inputs.registry_name }}/${{ needs.build-and-push.matrix.targets }}:${{ inputs.image_tag }}" \
+            $(printf '${{ inputs.registry_name }}/${{ needs.build-and-push.matrix.targets }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ inputs.registry_name }}/${{ needs.prepare-build.outputs.targets }}:${{ inputs.image_tag }}
+          docker buildx imagetools inspect ${{ inputs.registry_name }}/${{ needs.build-and-push.matrix.targets }}:${{ inputs.image_tag }}
