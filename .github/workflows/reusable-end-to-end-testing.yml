@@ -81,20 +81,20 @@ jobs:
           for image in tmp/artifacts/*.tar; do
             output=$(docker load --input $image)
             image_id=$(echo $output | awk '{ print $4 }')
-            docker tag $image_id $(basename $image .tar):${{ inputs.image_tag }}
+            docker tag $image_id openclarity.io/$(basename $image .tar):${{ inputs.image_tag }}
             docker inspect $image_id
           done
           docker images
 
       - name: Run end to end tests
         env:
-          VMCLARITY_E2E_APISERVER_IMAGE: vmclarity-apiserver:${{ inputs.image_tag }}
-          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: vmclarity-orchestrator:${{ inputs.image_tag }}
-          VMCLARITY_E2E_UI_IMAGE: vmclarity-ui:${{ inputs.image_tag }}
-          VMCLARITY_E2E_UIBACKEND_IMAGE: vmclarity-ui-backend:${{ inputs.image_tag }}
-          VMCLARITY_E2E_SCANNER_IMAGE: vmclarity-cli:${{ inputs.image_tag }}
-          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: vmclarity-cr-discovery-server:${{ inputs.image_tag }}
-          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: vmclarity-plugin-kics:${{ inputs.image_tag }}
+          VMCLARITY_E2E_APISERVER_IMAGE: openclarity.io/vmclarity-apiserver:${{ inputs.image_tag }}
+          VMCLARITY_E2E_ORCHESTRATOR_IMAGE: openclarity.io/vmclarity-orchestrator:${{ inputs.image_tag }}
+          VMCLARITY_E2E_UI_IMAGE: openclarity.io/vmclarity-ui:${{ inputs.image_tag }}
+          VMCLARITY_E2E_UIBACKEND_IMAGE: openclarity.io/vmclarity-ui-backend:${{ inputs.image_tag }}
+          VMCLARITY_E2E_SCANNER_IMAGE: openclarity.io/vmclarity-cli:${{ inputs.image_tag }}
+          VMCLARITY_E2E_CR_DISCOVERY_SERVER_IMAGE: openclarity.io/vmclarity-cr-discovery-server:${{ inputs.image_tag }}
+          VMCLARITY_E2E_PLUGIN_KICS_IMAGE: openclarity.io/vmclarity-plugin-kics:${{ inputs.image_tag }}
           VMCLARITY_E2E_PLATFORM: ${{ inputs.platform }}
         run: |
           if [[ "${{ inputs.platform }}" == "kubernetes" ]]; then
