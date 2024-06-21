@@ -3,10 +3,11 @@ name: 'Build and Push Component Release'
 on:
   workflow_call:
     inputs:
-      image_name:
-        required: true
+      registry_name:
+        required: false
         type: string
         description: 'Name of the image to publish'
+        default: ghcr.io/wewanttocontributetovmclarity
       image_tag:
         required: true
         type: string
@@ -102,7 +103,7 @@ jobs:
           targets: ${{ needs.prepare-build.outputs.targets }}
           set: |
             *.platform=${{ matrix.platform }}
-            *.output=type=image,name=${{ inputs.image_name }},push-by-digest=true,name-canonical=true,push=true
+            *.output=type=image,name=${{ inputs.registry_name }}/${{ matrix.target }},push-by-digest=true,name-canonical=true,push=true
             *.tags=
             *.cache-to=type=local,dest=/tmp/.buildx-cache
             *.cache-from=type=local,src=/tmp/.buildx-cache
@@ -157,9 +158,9 @@ jobs:
         run: |
           # shellcheck disable=SC2046
           docker buildx imagetools create \
-            --tag "${{ inputs.image_name }}:${{ inputs.image_tag }}" \
-            $(printf '${{ inputs.image_name }}@sha256:%s ' *)
+            --tag "${{ inputs.image_name }}/${{ matrix.target }}:${{ inputs.image_tag }}" \
+            $(printf '${{ inputs.image_name }}/${{ matrix.target }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ inputs.image_name }}:${{ inputs.image_tag }}
+          docker buildx imagetools inspect ${{ inputs.image_name }}/${{ matrix.target }}:${{ inputs.image_tag }}

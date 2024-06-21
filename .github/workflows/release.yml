@@ -129,7 +129,6 @@ jobs:
     name: Build & Push
     uses: ./.github/workflows/build-and-push-components-release.yml
     with:
-      image_name: ghcr.io/wewanttocontributetovmclarity//${{ matrix.target }}
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
 
   main_release:
