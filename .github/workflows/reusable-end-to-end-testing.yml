@@ -82,6 +82,7 @@ jobs:
             output=$(docker load --input $image)
             image_id=$(echo $output | awk '{ print $4 }')
             docker tag $image_id $(basename $image .tar):${{ inputs.image_tag }}
+            docker inspect $image_id
           done
           docker images
 
