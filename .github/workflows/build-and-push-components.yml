@@ -61,7 +61,7 @@ jobs:
         run: |
           mkdir -p /tmp/artifacts
           mv "/tmp/${{ inputs.bake_target_name }}.tar" /tmp/artifacts/
-          ARTIFACT_NAME="$(echo ${{ inputs.bake_target_name }}-${{ inputs.image_tag }}-${{ matrix.platform }} | tr '/' '-')"
+          ARTIFACT_NAME="$(echo "${{ inputs.bake_target_name }}-${{ inputs.image_tag }}-${{ matrix.platform }}" | tr '/' '-')"
           echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
 
       - name: Upload artifacts
