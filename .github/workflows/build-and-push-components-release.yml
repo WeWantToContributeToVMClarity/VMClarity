@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       timestamp: ${{ steps.timestamp.outputs.timestamp }}
-      targets: ${{ steps.targets.outputs.targets }}
+      targets: ${{ steps.targets.outputs.target }}
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -158,9 +158,9 @@ jobs:
         run: |
           # shellcheck disable=SC2046
           docker buildx imagetools create \
-            --tag "${{ inputs.registry_name }}/${{ matrix.target }}:${{ inputs.image_tag }}" \
-            $(printf '${{ inputs.registry_name }}/${{ matrix.target }}@sha256:%s ' *)
+            --tag "${{ inputs.registry_name }}/${{ matrix.targets }}:${{ inputs.image_tag }}" \
+            $(printf '${{ inputs.registry_name }}/${{ matrix.targets }}@sha256:%s ' *)
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ inputs.registry_name }}/${{ matrix.target }}:${{ inputs.image_tag }}
+          docker buildx imagetools inspect ${{ inputs.registry_name }}/${{ matrix.targets }}:${{ inputs.image_tag }}

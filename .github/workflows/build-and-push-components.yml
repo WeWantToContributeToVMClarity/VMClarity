@@ -83,9 +83,9 @@ jobs:
       - name: Save artifacts
         run: |
           mkdir -p /tmp/artifacts
-          mv /tmp/"${{ needs.prepare-build.outputs.targets }}".tar /tmp/artifacts/
-          ARTIFACT_NAME="$(echo "${{ needs.prepare-build.outputs.targets }}"-"${{ inputs.image_tag }}"-"${{ matrix.platform }}" | tr '/' '-')"
-          echo ARTIFACT_NAME=$ARTIFACT_NAME >> "$GITHUB_ENV"
+          mv "/tmp/${{ needs.prepare-build.outputs.targets }}.tar" /tmp/artifacts/
+          ARTIFACT_NAME="$(echo ${{ needs.prepare-build.outputs.targets }}-${{ inputs.image_tag }}-${{ matrix.platform }} | tr '/' '-')"
+          echo ARTIFACT_NAME="$ARTIFACT_NAME" >> "$GITHUB_ENV"
 
       - name: Upload artifacts
         id: upload-artifacts
