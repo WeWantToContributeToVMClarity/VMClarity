@@ -19,6 +19,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/docker/docker/api/types/filters"
@@ -77,7 +78,9 @@ func (l *DockerImageLoader) Load(ctx context.Context, nodes []nodes.Node) error 
 	// Get image IDs for Image RepoTags
 	mapping := make(imageIDRepoTagMapping, 0)
 	for _, image := range l.images {
-		logger.Errorf("get ImageID for RepoTag %s", image)
+		// strip down "docker.io/library/" from the beginning of each image
+		image = strings.TrimPrefix(image, "docker.io/library/")
+
 		ids, err := l.imageIDsFromRepoTags(ctx, []string{image})
 		if err != nil {
 			return fmt.Errorf("failed to get ImageID for RepoTag %s: %w", image, err)
