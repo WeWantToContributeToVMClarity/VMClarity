@@ -44,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ${{ fromJson(needs.prepare-build.outputs.targets) }}
+        targets: ${{ fromJson(needs.prepare-build.outputs.targets) }}
         platform:
           - linux/amd64
           - linux/arm64
@@ -67,10 +67,10 @@ jobs:
         uses: docker/bake-action@7a5dfed3550ca014665af2a27af8fc9d7284b9b3 # v4.5.0
         id: bake
         with:
-          targets: ${{ matrix.target }}
+          targets: ${{ matrix.targets }}
           set: |
             *.platform=${{ matrix.platform }}
-            *.output=type=docker,dest=/tmp/${{ needs.prepare-build.outputs.targets }}.tar
+            *.output=type=docker,dest=/tmp/${{ matrix.targets }}.tar
             *.tags=
             *.cache-to=type=local,dest=/tmp/.buildx-cache
             *.cache-from=type=local,src=/tmp/.buildx-cache
@@ -83,8 +83,8 @@ jobs:
       - name: Save artifacts
         run: |
           mkdir -p /tmp/artifacts
-          mv "/tmp/${{ needs.prepare-build.outputs.targets }}.tar" /tmp/artifacts/
-          ARTIFACT_NAME="$(echo ${{ needs.prepare-build.outputs.targets }}-${{ inputs.image_tag }}-${{ matrix.platform }} | tr '/' '-')"
+          mv "/tmp/${{ matrix.targets }}.tar" /tmp/artifacts/
+          ARTIFACT_NAME="$(echo ${{ matrix.targets }}-${{ inputs.image_tag }}-${{ matrix.platform }} | tr '/' '-')"
           echo ARTIFACT_NAME="$ARTIFACT_NAME" >> "$GITHUB_ENV"
 
       - name: Upload artifacts
@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: /tmp/artifacts/${{ needs.prepare-build.outputs.targets }}.tar
+          path: /tmp/artifacts/${{ matrix.targets }}.tar
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
