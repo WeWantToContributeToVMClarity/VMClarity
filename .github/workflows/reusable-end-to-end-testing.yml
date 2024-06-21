@@ -79,10 +79,10 @@ jobs:
       - name: Load images to local Docker registry
         run: |
           for image in tmp/artifacts/*.tar; do
-            output="$(docker load --input $image)"
+            output="$(docker load --input "$image")"
             image_id="$(echo "$output" | awk "{ print $4 }")"
             repository="openclarity.io/"
-            image_name="$(basename $image .tar):"
+            image_name="$(basename "$image" .tar):"
             tag="${{ inputs.image_tag }}"
             docker tag "$image_id" "$repository$image_name$tag"
             docker inspect "$image_id"
