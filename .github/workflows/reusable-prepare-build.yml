@@ -1,0 +1,35 @@
+name: Build & Push
+
+on:
+  workflow_call:
+    inputs:
+      bake-group:
+        required: false
+        type: string
+        description: 'Name of the Docker Bake group of targets'
+        default: default
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      timestamp: ${{ steps.timestamp.outputs.timestamp }}
+      targets: ${{ steps.targets.outputs.targets }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Set timestamp
+        id: timestamp
+        run: |
+          ##
+          ## Set timestamp variable
+          ##
+
+          echo "timestamp=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
+
+      - name: List targets
+        id: targets
+        uses: docker/bake-action/subaction/list-targets@7a5dfed3550ca014665af2a27af8fc9d7284b9b3 # v4.5.0
+        with:
+          target: ${{ inputs.bake-group }}

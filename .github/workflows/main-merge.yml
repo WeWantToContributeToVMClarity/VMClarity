@@ -13,10 +13,21 @@ jobs:
     uses: ./.github/workflows/reusable-verification.yml
     secrets: inherit
 
-  build-and-push:
+  prepare-build:
     needs: verification
-    uses: ./.github/workflows/reusable-build-and-push.yml
+    name: Prepare Build
+    uses: ./.github/workflows/reusable-prepare-build.yml
+
+  build_and_push:
+    needs: prepare-build  
+    name: Build & Push
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJson(needs.prepare-build.outputs.targets) }}
+    uses: ./.github/workflows/build-and-push-component-release.yml
     with:
+      image_name: ghcr.io/wewanttocontributetovmclarity//${{ matrix.target }}
       image_tag: latest
-      push: true
-      use_release_repository: true
+      timestamp: ${{ needs.prepare-build.outputs.timestamp }}
+      bake_target_name: ${{ matrix.target }}

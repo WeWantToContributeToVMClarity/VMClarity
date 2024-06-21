@@ -6,25 +6,34 @@ on:
 
 permissions:
   packages: write
-  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # verification:
-  #   name: Verification
-  #   uses: ./.github/workflows/reusable-verification.yml
-  #   secrets: inherit
+  verification:
+    name: Verification
+    uses: ./.github/workflows/reusable-verification.yml
+    secrets: inherit
+
+  prepare-build:
+    needs: verification
+    name: Prepare Build
+    uses: ./.github/workflows/reusable-prepare-build.yml 
 
   build:
-    # needs: verification
+    needs: prepare-build
     name: Build
-    uses: ./.github/workflows/reusable-build-and-push.yml
+    uses: ./.github/workflows/reusable-build-and-push-component.yml
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJson(needs.prepare-build.outputs.targets) }}
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
-      use_release_repository: false
+      timestamp: ${{ needs.prepare-build.outputs.timestamp }}
+      bake_target_name: ${{ matrix.target }}
 
   e2e-docker:
     needs: build
