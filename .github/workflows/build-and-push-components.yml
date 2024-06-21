@@ -1,4 +1,4 @@
-name: 'Build and upload Component'
+name: 'Build and Upload Component'
 
 on:
   workflow_call:
@@ -80,14 +80,14 @@ jobs:
           COMMIT_HASH: ${{ github.sha }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
-      - name: Save artifacts
+      - name: Save artifact
         run: |
           mkdir -p /tmp/artifacts
           mv "/tmp/${{ matrix.targets }}.tar" /tmp/artifacts/
           ARTIFACT_NAME="$(echo ${{ matrix.targets }}-${{ inputs.image_tag }}-${{ matrix.platform }} | tr '/' '-')"
           echo ARTIFACT_NAME="$ARTIFACT_NAME" >> "$GITHUB_ENV"
 
-      - name: Upload artifacts
+      - name: Upload artifact
         id: upload-artifacts
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
