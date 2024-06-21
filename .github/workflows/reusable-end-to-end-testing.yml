@@ -80,7 +80,7 @@ jobs:
         run: |
           for image in tmp/artifacts/*.tar; do
             output="$(docker load --input $image)"
-            image_id="$(echo $output | awk '{ print $4 }')"
+            image_id="$(echo "$output" | awk "{ print $4 }")"
             repository="openclarity.io/"
             image_name="$(basename $image .tar):"
             tag="${{ inputs.image_tag }}"
