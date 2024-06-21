@@ -44,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        targets: ${{ fromJson(needs.prepare-build.outputs.targets) }}
+        target: ${{ fromJson(needs.prepare-build.outputs.targets) }}
         platform:
           - linux/amd64
           - linux/arm64
@@ -67,7 +67,7 @@ jobs:
         uses: docker/bake-action@7a5dfed3550ca014665af2a27af8fc9d7284b9b3 # v4.5.0
         id: bake
         with:
-          targets: ${{ needs.prepare-build.outputs.targets }}
+          targets: ${{ matrix.target }}
           set: |
             *.platform=${{ matrix.platform }}
             *.output=type=docker,dest=/tmp/${{ needs.prepare-build.outputs.targets }}.tar
