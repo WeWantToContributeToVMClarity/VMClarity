@@ -128,7 +128,10 @@ jobs:
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
-          compression-level: 0
+          compression-level: 0       
+
+      - name: Export target name
+        run: echo TARGET="${{ matrix.targets }}" >> "$GITHUB_ENV"   
 
   merge-and-push:
     runs-on: ubuntu-latest
@@ -159,8 +162,8 @@ jobs:
         run: |
           # shellcheck disable=SC2046
           docker buildx imagetools create \
-            --tag "${{ inputs.registry_name }}/${{ needs.build-and-push.matrix.targets }}:${{ inputs.image_tag }}" \
-            $(printf '${{ inputs.registry_name }}/${{ needs.build-and-push.matrix.targets }}@sha256:%s ' *)
+            --tag "${{ inputs.registry_name }}/${{ env.TARGET }}:${{ inputs.image_tag }}" \
+            $(printf '${{ inputs.registry_name }}/${{ env.TARGET }}@sha256:%s ' *)
 
       - name: Inspect image
-        run: docker buildx imagetools inspect ${{ inputs.registry_name }}/${{ needs.build-and-push.matrix.targets }}:${{ inputs.image_tag }}
+        run: docker buildx imagetools inspect ${{ inputs.registry_name }}/${{ env.TARGET }}:${{ inputs.image_tag }}
