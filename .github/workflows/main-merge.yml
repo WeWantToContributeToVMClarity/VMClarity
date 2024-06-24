@@ -15,6 +15,7 @@ jobs:
     secrets: inherit
 
   build-and-push:
+    needs: verification
     uses: ./.github/workflows/build-and-push-components-release.yml
     with:
       image_tag: latest
