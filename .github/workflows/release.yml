@@ -130,7 +130,7 @@ jobs:
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
 
-  main_release:
+  main-release:
     needs:
       - verification
       - publish-helm-chart
