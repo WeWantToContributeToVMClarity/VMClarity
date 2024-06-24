@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/reusable-verification.yml
     secrets: inherit
 
-  publish_helm_chart:
+  publish-helm-chart:
     needs: verification
     name: Publish Helm Chart
     runs-on: ubuntu-latest
@@ -122,9 +122,9 @@ jobs:
           if-no-files-found: error
           compression-level: 0
 
-  build_and_push:
+  build-and-push:
     needs:
-      - publish_helm_chart
+      - publish-helm-chart
       - artifacts
     name: Build & Push
     uses: ./.github/workflows/build-and-push-components-release.yml
@@ -134,9 +134,9 @@ jobs:
   main_release:
     needs:
       - verification
-      - publish_helm_chart
+      - publish-helm-chart
       - artifacts
-      - build_and_push
+      - build-and-push
     name: Release
     runs-on: ubuntu-latest
     steps:

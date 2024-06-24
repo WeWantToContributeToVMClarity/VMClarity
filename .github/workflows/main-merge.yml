@@ -14,7 +14,7 @@ jobs:
     uses: ./.github/workflows/reusable-verification.yml
     secrets: inherit
 
-  build_and_push:
+  build-and-push:
     name: Build & Push
     uses: ./.github/workflows/build-and-push-components-release.yml
     with:
