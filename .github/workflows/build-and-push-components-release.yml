@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       timestamp: ${{ steps.timestamp.outputs.timestamp }}
-      targets: ${{ steps.targets.outputs.target }}
+      targets: ${{ steps.targets.outputs.targets }}
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -86,8 +86,7 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.ref }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+          restore-keys: ${{ runner.os }}-buildx-
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
