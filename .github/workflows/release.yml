@@ -15,19 +15,7 @@ jobs:
     uses: ./.github/workflows/reusable-verification.yml
     secrets: inherit
 
-  build_and_push:
-    needs:
-      - verification
-      - artifacts
-      - publish_helm
-    name: Build & Push
-    uses: ./.github/workflows/reusable-build-and-push.yml
-    with:
-      image_tag: ${{ github.ref_name }}
-      push: true
-      use_release_repository: true
-
-  publish_helm:
+  publish-helm-chart:
     needs: verification
     name: Publish Helm Chart
     runs-on: ubuntu-latest
@@ -63,7 +51,7 @@ jobs:
         uses: actions/setup-go@cdcb36043654635271a94b9a6d1392de5bb323a7 # v5.0.1
         with:
           # NOTE(chrisgacsal): Use actions/cache for caching Go dependency and build caches
-          # as if provides better flexibility like setting the cache key which reduces cache misses significantly.
+          # as it provides better flexibility like setting the cache key which reduces cache misses significantly.
           cache: false
           go-version-file: '.go-version'
 
@@ -134,12 +122,20 @@ jobs:
           if-no-files-found: error
           compression-level: 0
 
-  main_release:
+  build-and-push:
+    needs:
+      - publish-helm-chart
+      - artifacts
+    uses: ./.github/workflows/build-and-push-components-release.yml
+    with:
+      image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
+
+  main-release:
     needs:
       - verification
-      - build_and_push
-      - publish_helm
+      - publish-helm-chart
       - artifacts
+      - build-and-push
     name: Release
     runs-on: ubuntu-latest
     steps:
