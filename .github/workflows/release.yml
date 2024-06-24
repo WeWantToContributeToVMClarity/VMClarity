@@ -10,36 +10,6 @@ permissions:
   contents: write
 
 jobs:
-  verification:
-    name: Verification
-    uses: ./.github/workflows/reusable-verification.yml
-    secrets: inherit
-
-  publish-helm-chart:
-    needs: verification
-    name: Publish Helm Chart
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-
-      - name: Create Helm Chart package
-        env:
-          VERSION: ${{ github.ref_name }}
-        run: make dist-helm-chart
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Package and Publish Helm Chart
-        env:
-          VERSION: ${{ github.ref_name }}
-        run: make publish-helm-chart
-
   artifacts:
     name: Create artifacts
     runs-on: ubuntu-latest
@@ -122,19 +92,51 @@ jobs:
           if-no-files-found: error
           compression-level: 0
 
+  verification:
+    name: Verification
+    uses: ./.github/workflows/reusable-verification.yml
+    secrets: inherit
+
+  publish-helm-chart:
+    needs: verification
+    name: Publish Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Create Helm Chart package
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: make dist-helm-chart
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package and Publish Helm Chart
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: make publish-helm-chart
+
   build-and-push:
     needs:
-      - publish-helm-chart
       - artifacts
+      - verification
+      - publish-helm-chart
+    name: Build
     uses: ./.github/workflows/build-and-push-components-release.yml
     with:
-      image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
+      image_tag: ${{ github.ref_name }}
 
   main-release:
     needs:
+      - artifacts
       - verification
       - publish-helm-chart
-      - artifacts
       - build-and-push
     name: Release
     runs-on: ubuntu-latest
