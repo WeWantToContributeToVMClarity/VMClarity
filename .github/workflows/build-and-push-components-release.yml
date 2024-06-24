@@ -43,29 +43,8 @@ jobs:
         with:
           target: ${{ inputs.bake-group }}
 
-  build-vars:
-    needs: prepare-build
-    runs-on: ubuntu-latest
-    outputs:
-      digests-cache-name: ${{ steps.build-vars.outputs.digests-cache-name }}
-    steps:
-      - name: Set build variables
-        id: build-vars
-        run: |
-
-          ##
-          ## Set digests cache name
-          ##
-          ##    Example: digest-1234-a2850e9cc4e2b3a3
-          ##
-
-          image_name_hash="$(sha256sum <<< "${{ needs.prepare-build.outputs.targets }}" | cut -f1 -d' ')"
-          printf "digests-cache-name=digest-%s-%.16s" "${{ github.run_id }}" "${image_name_hash}" >> "$GITHUB_OUTPUT"
-
   build-and-push:
-    needs:
-    - prepare-build
-    - build-vars
+    needs: prepare-build
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
