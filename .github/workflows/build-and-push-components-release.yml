@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       timestamp: ${{ steps.timestamp.outputs.timestamp }}
-      targets: ${{ steps.targets.outputs.target }}
+      targets: ${{ steps.targets.outputs.targets }}
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -63,10 +63,10 @@ jobs:
           printf "digests-cache-name=digest-%s-%.16s" "${{ github.run_id }}" "${image_name_hash}" >> "$GITHUB_OUTPUT"
 
   build-and-push:
-    runs-on: ubuntu-latest
     needs:
     - prepare-build
     - build-vars
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -134,11 +134,11 @@ jobs:
         run: echo TARGET="${{ matrix.targets }}" >> "$GITHUB_ENV"   
 
   merge-and-push:
-    runs-on: ubuntu-latest
     needs:
       - build-vars
       - prepare-build
       - build-and-push
+    runs-on: ubuntu-latest
     steps:
       - name: Download digests
         uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
