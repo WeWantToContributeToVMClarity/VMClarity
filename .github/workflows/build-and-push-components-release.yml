@@ -1,4 +1,4 @@
-name: 'Build and Push Component Release'
+name: Build and Push Components Release
 
 on:
   workflow_call:

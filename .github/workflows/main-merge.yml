@@ -1,4 +1,5 @@
-name: Main merge
+name: Main Merge
+
 on:
   push:
     branches:

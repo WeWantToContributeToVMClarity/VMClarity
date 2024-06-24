@@ -1,4 +1,4 @@
-name: 'Build and Upload Component'
+name: Build and Upload Components
 
 on:
   workflow_call:
@@ -38,7 +38,7 @@ jobs:
         with:
           target: ${{ inputs.bake-group }}
 
-  build-and-upload-artifact:
+  build-and-upload:
     needs: prepare-build
     runs-on: ubuntu-latest
     strategy:

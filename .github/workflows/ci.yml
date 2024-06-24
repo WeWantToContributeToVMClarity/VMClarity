@@ -20,7 +20,7 @@ jobs:
   build:
     needs: verification
     name: Build
-    uses: ./.github/workflows/build-and-push-components.yml
+    uses: ./.github/workflows/build-and-upload-components.yml
     with:
       image_tag: ${{ format('pr{0}-{1}', github.event.pull_request.number, github.sha) }}
 
