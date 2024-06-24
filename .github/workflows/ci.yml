@@ -52,5 +52,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo Success
-        run: |
-          echo "::notice Success!"
+        run: echo "::notice Success!"

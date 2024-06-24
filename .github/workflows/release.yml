@@ -51,7 +51,7 @@ jobs:
         uses: actions/setup-go@cdcb36043654635271a94b9a6d1392de5bb323a7 # v5.0.1
         with:
           # NOTE(chrisgacsal): Use actions/cache for caching Go dependency and build caches
-          # as if provides better flexibility like setting the cache key which reduces cache misses significantly.
+          # as it provides better flexibility like setting the cache key which reduces cache misses significantly.
           cache: false
           go-version-file: '.go-version'
 
