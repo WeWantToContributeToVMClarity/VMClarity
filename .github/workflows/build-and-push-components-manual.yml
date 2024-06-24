@@ -97,7 +97,7 @@ jobs:
       fail-fast: false
       matrix:
         target: ${{ fromJson(needs.prepare.outputs.targets) }}
-    uses: ./.github/workflows/build-and-push-component.yaml
+    uses: ./.github/workflows/build-and-upload-components.yml
     with:
       image_name: "${{ needs.prepare.outputs.registry }}/${{ matrix.target }}${{ needs.prepare.outputs.suffix }}"
       image_tag: ${{ inputs.image_tag }}
