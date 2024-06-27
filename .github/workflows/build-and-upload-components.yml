@@ -7,6 +7,11 @@ on:
         required: true
         type: string
         description: 'Image tag to use.'
+      registry_name:
+        required: false
+        type: string
+        description: 'Name of the registry.'
+        default: openclarity.io
       bake-group:
         required: false
         type: string
@@ -73,7 +78,7 @@ jobs:
           VERSION: ${{ inputs.image_tag }}
           BUILD_TIMESTAMP: ${{ needs.prepare-build.outputs.timestamp }}
           COMMIT_HASH: ${{ github.sha }}
-          DOCKER_REGISTRY: "openclarity.io"
+          DOCKER_REGISTRY: ${{ inputs.registry_name }}
           DOCKER_TAG: ${{ inputs.image_tag }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 

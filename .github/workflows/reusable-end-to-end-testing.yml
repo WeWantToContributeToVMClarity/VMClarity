@@ -86,7 +86,7 @@ jobs:
       - name: Load images to local Docker registry
         run: |
           for image_archive in tmp/artifacts/*.tar; do
-            docker load --input "$image_archive" --quiet
+            docker load --input "$image_archive"
           done
           docker images
 
