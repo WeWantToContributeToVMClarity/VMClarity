@@ -73,6 +73,7 @@ jobs:
           VERSION: ${{ inputs.image_tag }}
           BUILD_TIMESTAMP: ${{ needs.prepare-build.outputs.timestamp }}
           COMMIT_HASH: ${{ github.sha }}
+          DOCKER_REGISTRY: "openclarity.io"
           DOCKER_TAG: ${{ inputs.image_tag }}
           BUILD_OPTS: -tags=exclude_graphdriver_btrfs,exclude_graphdriver_devicemapper
 
