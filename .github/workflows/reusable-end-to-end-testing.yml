@@ -85,12 +85,11 @@ jobs:
 
       - name: Load images to local Docker registry
         run: |
-          for image in tmp/artifacts/*.tar; do
-            echo "$image"
-            output="$(docker load --input "$image")"
-            echo "$output"
-            image_id="$(echo "$output" | awk '{ print $4 }')"
-            docker tag "$image_id" "${{ inputs.registry_name }}/$(basename "$image" .tar):${{ inputs.image_tag }}"
+          for image_archive in tmp/artifacts/*.tar; do
+            image_name=$(basename $image_archive .tar)
+            image_load_output=$(docker load --input "$image_archive" --quiet)
+            image_id=${image_load_output#"Loaded image ID: sha256:"}
+            docker tag "$image_id" "${{ inputs.registry_name }}/"$image_name":${{ inputs.image_tag }}"
           done
           docker images
 
