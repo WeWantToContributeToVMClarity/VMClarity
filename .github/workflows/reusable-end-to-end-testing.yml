@@ -86,6 +86,7 @@ jobs:
       - name: Load images to local Docker registry
         run: |
           for image in tmp/artifacts/*.tar; do
+            echo "$image"
             output="$(docker load --input "$image")"
             echo "$output"
             image_id="$(echo "$output" | awk '{ print $4 }')"
