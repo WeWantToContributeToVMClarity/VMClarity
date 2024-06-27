@@ -1,4 +1,4 @@
-name: Build and Push Components Release
+name: Build and Push Components Registry
 
 on:
   workflow_call:

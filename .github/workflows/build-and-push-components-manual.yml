@@ -1,4 +1,4 @@
-name: Build & Push manually
+name: Build and Push Components Manual
 
 on:
   workflow_dispatch:

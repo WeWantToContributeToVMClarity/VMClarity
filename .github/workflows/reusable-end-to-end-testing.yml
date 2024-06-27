@@ -87,8 +87,8 @@ jobs:
         run: |
           for image in tmp/artifacts/*.tar; do
             output="$(docker load --input "$image")"
+            echo "$output"
             image_id="$(echo "$output" | awk '{ print $4 }')"
-            image_name="$(basename "$image" .tar)"
             docker tag "$image_id" "${{ inputs.registry_name }}/$(basename "$image" .tar):${{ inputs.image_tag }}"
           done
           docker images
