@@ -1,4 +1,4 @@
-name: Build & Push manually
+name: Build and Push Components Manual
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   build-and-push:
-    uses: ./.github/workflows/build-and-push-components-registry.yaml
+    uses: ./.github/workflows/build-and-push-components-registry.yml
     with:
       suffix: "-dev"
       image_tag: latest
