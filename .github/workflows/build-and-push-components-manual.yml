@@ -1,0 +1,14 @@
+name: Build & Push manually
+
+on:
+  workflow_dispatch:
+
+permissions:
+  packages: write
+
+jobs:
+  build-and-push:
+    uses: ./.github/workflows/build-and-push-components-registry.yaml
+    with:
+      suffix: "-dev"
+      image_tag: latest
